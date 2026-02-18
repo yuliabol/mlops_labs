@@ -1,0 +1,42 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py data/raw/healthcare-dataset-stroke-data.csv 
+      data/prepared
+    deps:
+    - path: data/raw/healthcare-dataset-stroke-data.csv
+      hash: md5
+      md5: 3f25a4c2f2963d969e1a156c08968577
+      size: 316971
+    - path: src/prepare.py
+      hash: md5
+      md5: 9582a476244908fc724202a4ab760c93
+      size: 1492
+    outs:
+    - path: data/prepared
+      hash: md5
+      md5: 4d1893ee21237fb5b1819b8e5ddf3b24.dir
+      size: 327574
+      nfiles: 2
+  train:
+    cmd: python src/train.py data/prepared/train.csv data/prepared/test.csv 
+      data/models
+    deps:
+    - path: data/prepared/test.csv
+      hash: md5
+      md5: 705363ce43dd36aa901a95e3acfe911a
+      size: 65562
+    - path: data/prepared/train.csv
+      hash: md5
+      md5: 9816fc1e856dda8b4f6e72f2b86833f1
+      size: 262012
+    - path: src/train.py
+      hash: md5
+      md5: 5958095b4deb0a2a1e5db9750c9f8621
+      size: 8620
+    outs:
+    - path: data/models
+      hash: md5
+      md5: 63d824656edec657f8d7618cca35602e.dir
+      size: 1167552
+      nfiles: 1
