@@ -30,7 +30,9 @@ from xgboost import XGBClassifier
 
 warnings.filterwarnings("ignore")
 optuna.logging.set_verbosity(optuna.logging.WARNING)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -58,22 +60,27 @@ def build_preprocessor(X: pd.DataFrame) -> ColumnTransformer:
     categorical_cols = X.select_dtypes(include=["object"]).columns.tolist()
     numerical_cols = X.select_dtypes(include=["number"]).columns.tolist()
 
-    numerical_transformer = Pipeline([
-        ("imputer", SimpleImputer(strategy="mean")),
-        ("scaler", StandardScaler()),
-    ])
+    numerical_transformer = Pipeline(
+        [
+            ("imputer", SimpleImputer(strategy="mean")),
+            ("scaler", StandardScaler()),
+        ]
+    )
 
-    categorical_transformer = Pipeline([
-        ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("encoder", OneHotEncoder(handle_unknown="ignore")),
-    ])
+    categorical_transformer = Pipeline(
+        [
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("encoder", OneHotEncoder(handle_unknown="ignore")),
+        ]
+    )
 
-    preprocessor = ColumnTransformer([
-        ("num", numerical_transformer, numerical_cols),
-        ("cat", categorical_transformer, categorical_cols),
-    ])
+    preprocessor = ColumnTransformer(
+        [
+            ("num", numerical_transformer, numerical_cols),
+            ("cat", categorical_transformer, categorical_cols),
+        ]
+    )
     return preprocessor
-
 
 
 def build_xgboost(trial, cfg, y_train) -> XGBClassifier:
@@ -83,15 +90,38 @@ def build_xgboost(trial, cfg, y_train) -> XGBClassifier:
     scale_pos_weight = n_neg / n_pos if n_pos > 0 else 1.0
 
     return XGBClassifier(
-        n_estimators=trial.suggest_int("n_estimators", xgb_cfg.n_estimators.low, xgb_cfg.n_estimators.high),
-        max_depth=trial.suggest_int("max_depth", xgb_cfg.max_depth.low, xgb_cfg.max_depth.high),
-        learning_rate=trial.suggest_float("learning_rate", xgb_cfg.learning_rate.low, xgb_cfg.learning_rate.high, log=True),
-        subsample=trial.suggest_float("subsample", xgb_cfg.subsample.low, xgb_cfg.subsample.high),
-        colsample_bytree=trial.suggest_float("colsample_bytree", xgb_cfg.colsample_bytree.low, xgb_cfg.colsample_bytree.high),
-        min_child_weight=trial.suggest_int("min_child_weight", xgb_cfg.min_child_weight.low, xgb_cfg.min_child_weight.high),
+        n_estimators=trial.suggest_int(
+            "n_estimators", xgb_cfg.n_estimators.low, xgb_cfg.n_estimators.high
+        ),
+        max_depth=trial.suggest_int(
+            "max_depth", xgb_cfg.max_depth.low, xgb_cfg.max_depth.high
+        ),
+        learning_rate=trial.suggest_float(
+            "learning_rate",
+            xgb_cfg.learning_rate.low,
+            xgb_cfg.learning_rate.high,
+            log=True,
+        ),
+        subsample=trial.suggest_float(
+            "subsample", xgb_cfg.subsample.low, xgb_cfg.subsample.high
+        ),
+        colsample_bytree=trial.suggest_float(
+            "colsample_bytree",
+            xgb_cfg.colsample_bytree.low,
+            xgb_cfg.colsample_bytree.high,
+        ),
+        min_child_weight=trial.suggest_int(
+            "min_child_weight",
+            xgb_cfg.min_child_weight.low,
+            xgb_cfg.min_child_weight.high,
+        ),
         gamma=trial.suggest_float("gamma", xgb_cfg.gamma.low, xgb_cfg.gamma.high),
-        reg_alpha=trial.suggest_float("reg_alpha", xgb_cfg.reg_alpha.low, xgb_cfg.reg_alpha.high),
-        reg_lambda=trial.suggest_float("reg_lambda", xgb_cfg.reg_lambda.low, xgb_cfg.reg_lambda.high),
+        reg_alpha=trial.suggest_float(
+            "reg_alpha", xgb_cfg.reg_alpha.low, xgb_cfg.reg_alpha.high
+        ),
+        reg_lambda=trial.suggest_float(
+            "reg_lambda", xgb_cfg.reg_lambda.low, xgb_cfg.reg_lambda.high
+        ),
         scale_pos_weight=scale_pos_weight,
         eval_metric="logloss",
         random_state=cfg.seed,
@@ -102,11 +132,25 @@ def build_xgboost(trial, cfg, y_train) -> XGBClassifier:
 def build_random_forest(trial, cfg) -> RandomForestClassifier:
     rf_cfg = cfg.model.random_forest
     return RandomForestClassifier(
-        n_estimators=trial.suggest_int("n_estimators", rf_cfg.n_estimators.low, rf_cfg.n_estimators.high),
-        max_depth=trial.suggest_int("max_depth", rf_cfg.max_depth.low, rf_cfg.max_depth.high),
-        min_samples_split=trial.suggest_int("min_samples_split", rf_cfg.min_samples_split.low, rf_cfg.min_samples_split.high),
-        min_samples_leaf=trial.suggest_int("min_samples_leaf", rf_cfg.min_samples_leaf.low, rf_cfg.min_samples_leaf.high),
-        max_features=trial.suggest_categorical("max_features", list(rf_cfg.max_features)),
+        n_estimators=trial.suggest_int(
+            "n_estimators", rf_cfg.n_estimators.low, rf_cfg.n_estimators.high
+        ),
+        max_depth=trial.suggest_int(
+            "max_depth", rf_cfg.max_depth.low, rf_cfg.max_depth.high
+        ),
+        min_samples_split=trial.suggest_int(
+            "min_samples_split",
+            rf_cfg.min_samples_split.low,
+            rf_cfg.min_samples_split.high,
+        ),
+        min_samples_leaf=trial.suggest_int(
+            "min_samples_leaf",
+            rf_cfg.min_samples_leaf.low,
+            rf_cfg.min_samples_leaf.high,
+        ),
+        max_features=trial.suggest_categorical(
+            "max_features", list(rf_cfg.max_features)
+        ),
         class_weight="balanced",
         random_state=cfg.seed,
     )
@@ -124,7 +168,6 @@ def build_logistic_regression(trial, cfg) -> LogisticRegression:
     )
 
 
-
 def objective(trial, cfg, X_train, y_train, X_val, y_val, sampler_name: str):
     model_type = cfg.model.type
     preprocessor = build_preprocessor(X_train)
@@ -139,17 +182,18 @@ def objective(trial, cfg, X_train, y_train, X_val, y_val, sampler_name: str):
     else:
         raise ValueError(f"Unknown model type: {model_type}")
 
-    pipeline = Pipeline([
-        ("preprocessor", preprocessor),
-        ("model", estimator),
-    ])
+    pipeline = Pipeline(
+        [
+            ("preprocessor", preprocessor),
+            ("model", estimator),
+        ]
+    )
 
     # Train & evaluate
     if cfg.hpo.use_cv:
-        scores = cross_val_score(pipeline, X_train, y_train,
-                                 cv=cfg.hpo.cv_folds,
-                                 scoring="f1",
-                                 n_jobs=-1)
+        scores = cross_val_score(
+            pipeline, X_train, y_train, cv=cfg.hpo.cv_folds, scoring="f1", n_jobs=-1
+        )
         metric_val = float(scores.mean())
         metric_std = float(scores.std())
     else:
@@ -177,7 +221,6 @@ def objective(trial, cfg, X_train, y_train, X_val, y_val, sampler_name: str):
     return metric_val
 
 
-
 def create_sampler(sampler_name: str, seed: int):
     if sampler_name == "tpe":
         return optuna.samplers.TPESampler(seed=seed)
@@ -185,11 +228,12 @@ def create_sampler(sampler_name: str, seed: int):
         return optuna.samplers.RandomSampler(seed=seed)
     elif sampler_name == "grid":
         # Grid sampler needs a search space — fallback to TPE for complex spaces
-        logger.warning("Grid sampler selected but requires explicit grid. Falling back to TPE.")
+        logger.warning(
+            "Grid sampler selected but requires explicit grid. Falling back to TPE."
+        )
         return optuna.samplers.TPESampler(seed=seed)
     else:
         raise ValueError(f"Unknown sampler: {sampler_name}")
-
 
 
 def run_study(cfg: DictConfig):
@@ -198,7 +242,9 @@ def run_study(cfg: DictConfig):
     direction = cfg.hpo.direction
     model_type = cfg.model.type
 
-    logger.info(f"Starting HPO | model={model_type} | sampler={sampler_name} | n_trials={n_trials}")
+    logger.info(
+        f"Starting HPO | model={model_type} | sampler={sampler_name} | n_trials={n_trials}"
+    )
 
     # Load data
     X_train, y_train, X_test, y_test = load_and_split(
@@ -254,7 +300,9 @@ def run_study(cfg: DictConfig):
         best_params = study.best_params
         best_trial_number = study.best_trial.number
 
-        logger.info(f"Best trial #{best_trial_number}: {cfg.hpo.metric}={best_value:.4f}")
+        logger.info(
+            f"Best trial #{best_trial_number}: {cfg.hpo.metric}={best_value:.4f}"
+        )
         logger.info(f"Best params: {best_params}")
 
         # Log best trial summary to parent run
@@ -263,12 +311,18 @@ def run_study(cfg: DictConfig):
 
         best_params_path = "best_params.json"
         with open(best_params_path, "w") as f:
-            json.dump({"best_trial": best_trial_number,
-                       "best_value": best_value,
-                       "best_params": best_params,
-                       "metric": cfg.hpo.metric,
-                       "sampler": sampler_name,
-                       "model_type": model_type}, f, indent=2)
+            json.dump(
+                {
+                    "best_trial": best_trial_number,
+                    "best_value": best_value,
+                    "best_params": best_params,
+                    "metric": cfg.hpo.metric,
+                    "sampler": sampler_name,
+                    "model_type": model_type,
+                },
+                f,
+                indent=2,
+            )
         mlflow.log_artifact(best_params_path)
         os.remove(best_params_path)
 
@@ -300,10 +354,12 @@ def run_study(cfg: DictConfig):
                 random_state=cfg.seed,
             )
 
-        final_pipeline = Pipeline([
-            ("preprocessor", preprocessor_final),
-            ("model", best_estimator),
-        ])
+        final_pipeline = Pipeline(
+            [
+                ("preprocessor", preprocessor_final),
+                ("model", best_estimator),
+            ]
+        )
         final_pipeline.fit(X_train, y_train)
 
         # Evaluate on test set
@@ -315,7 +371,9 @@ def run_study(cfg: DictConfig):
         mlflow.log_metric("final_test_f1", test_f1)
         mlflow.log_metric("final_test_roc_auc", test_roc_auc)
 
-        logger.info(f"Final model — Test F1: {test_f1:.4f} | Test ROC-AUC: {test_roc_auc:.4f}")
+        logger.info(
+            f"Final model — Test F1: {test_f1:.4f} | Test ROC-AUC: {test_roc_auc:.4f}"
+        )
 
         # Save model as artifact
         os.makedirs("models", exist_ok=True)
@@ -332,7 +390,6 @@ def run_study(cfg: DictConfig):
         logger.info(f"Parent run ID: {parent_run_id}")
 
     return study
-
 
 
 @hydra.main(version_base="1.3", config_path="../config", config_name="config")
