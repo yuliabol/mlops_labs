@@ -7,3 +7,6 @@ seaborn
 jupyter
 xgboost
 imblearn
+optuna
+hydra-core
+omegaconf

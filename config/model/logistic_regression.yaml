@@ -1,0 +1,12 @@
+# @package _global_
+model:
+  type: "logistic_regression"
+  logistic_regression:
+    C:
+      low: 0.001
+      high: 100.0
+    solver:
+      - "liblinear"
+      - "lbfgs"
+    penalty:
+      - "l2"

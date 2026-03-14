@@ -53,7 +53,6 @@ def preprocess_data(df):
     return X, y, preprocessor
 
 def train_model(X_train, y_train, preprocessor, max_depth, args):
-    # No more splitting here, data is already split
     
     n_pos = sum(y_train == 1)
     n_neg = sum(y_train == 0)
@@ -121,28 +120,11 @@ def evaluate_model(model, X_train, y_train, X_test, y_test):
 
 def main(args):
     mlflow.set_experiment("XGBoost Stroke Prediction 2")
-
-    # Assuming we only run one best model config for DVC pipeline usually, 
-    # but keeping loop if user wants multiple runs.
-    # For DVC pipeline, best to output ONE artifact. 
-    # I will keep the loop but save the LAST model as the artifact for DVC 
-    # or I will just run one iteration if depth is fixed. 
-    # For now, I'll stick to the existing logic but ensure the model is saved locally.
-    
     depths = [2, 3, 4, 5, 6, 10, 20]
-    # For DVC pipeline speed, maybe we should just run one depth? 
-    # The instructions say "modify hyperparameters", so let's stick to the list 
-    # unless it takes too long. But DVC stages should ideally return one definitive output.
-    # Let's assume we want to track all experiments but maybe save the last one as "current_model.pkl"
-    
     train_df = load_data(args.train_path)
     test_df = load_data(args.test_path)
     
     X_train, y_train, preprocessor = preprocess_data(train_df)
-    
-    # We need to preprocess test data similarly, but preprocess_data fits transformers?
-    # No, preprocess_data DEFINES the pipeline.
-    # X_train, y_train are dataframes.
     
     X_test = test_df.drop('stroke', axis=1)
     y_test = test_df['stroke']
@@ -205,9 +187,6 @@ def main(args):
             if os.path.exists(cm_fname):
                 os.remove(cm_fname)
             
-            # Save local model for DVC tracking (overwriting with the last one or saving specifically)
-            # We will save the best model or just the last one.
-            # For simplicity let's save the last one to data/models/model.pkl
             model_path = os.path.join(args.output_model_dir, "model.pkl")
             with open(model_path, "wb") as f:
                 pickle.dump(pipeline, f)

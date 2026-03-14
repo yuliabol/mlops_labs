@@ -20,8 +20,11 @@ models/
 mlruns/
 
 # Data
-data/
+data/**
+!data/**/*.dvc
+!data/**/.gitignore
 
 mlflow.db
 *.sqlite
 *.db
+optimize.log

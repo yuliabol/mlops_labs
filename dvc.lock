@@ -32,11 +32,43 @@ stages:
       size: 262012
     - path: src/train.py
       hash: md5
-      md5: 5958095b4deb0a2a1e5db9750c9f8621
-      size: 8620
+      md5: a57f21f3f66218ddbd6629a1a1892cf0
+      size: 7385
     outs:
     - path: data/models
       hash: md5
       md5: 63d824656edec657f8d7618cca35602e.dir
       size: 1167552
       nfiles: 1
+  optimize:
+    cmd: python src/optimize.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: dbe049f9034c92c83e18114b9b8cf5c1
+      size: 1406
+    - path: config/hpo/optuna.yaml
+      hash: md5
+      md5: 9303e4012f4778b9fbc1a1bb5e335d42
+      size: 28
+    - path: config/model/xgboost.yaml
+      hash: md5
+      md5: e7ac3538dfcfaa9c2df924f26f60c393
+      size: 482
+    - path: data/prepared/test.csv
+      hash: md5
+      md5: 705363ce43dd36aa901a95e3acfe911a
+      size: 65562
+    - path: data/prepared/train.csv
+      hash: md5
+      md5: 9816fc1e856dda8b4f6e72f2b86833f1
+      size: 262012
+    - path: src/optimize.py
+      hash: md5
+      md5: 25d5dcce6232b7219ee2f0d644101d91
+      size: 13385
+    outs:
+    - path: models/best_model_xgboost_tpe.pkl
+      hash: md5
+      md5: 723ada7d92a21916430f4b454f4d1550
+      size: 994722

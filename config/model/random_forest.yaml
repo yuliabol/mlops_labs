@@ -1,0 +1,19 @@
+# @package _global_
+model:
+  type: "random_forest"
+  random_forest:
+    n_estimators:
+      low: 50
+      high: 300
+    max_depth:
+      low: 3
+      high: 15
+    min_samples_split:
+      low: 2
+      high: 10
+    min_samples_leaf:
+      low: 1
+      high: 5
+    max_features:
+      - "sqrt"
+      - "log2"
