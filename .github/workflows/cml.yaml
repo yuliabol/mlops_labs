@@ -1,0 +1,82 @@
+name: Model CI (Train, Test, Report)
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint (flake8)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Format check (black)
+        run: |
+          black . --check
+
+      - name: Train model (CI mode)
+        run: |
+          python src/train.py data/prepared/train.csv data/prepared/test.csv data/models --ci
+
+      - name: Run tests (incl. Quality Gate)
+        env:
+          F1_THRESHOLD: "0.2"
+          ROC_AUC_THRESHOLD: "0.75"
+        run: |
+          pytest -v
+
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
+
+      - name: Create CML report (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## Model Metrics (CI Run)" > report.md
+          echo "| Metric | Value |" >> report.md
+          echo "| --- | --- |" >> report.md
+          echo "| Test F1 | $(jq -r '.test_f1' metrics.json) |" >> report.md
+          echo "| Test ROC-AUC | $(jq -r '.test_roc_auc' metrics.json) |" >> report.md
+          echo "| Test Accuracy | $(jq -r '.test_acc' metrics.json) |" >> report.md
+          echo "| Optimal Threshold | $(jq -r '.optimal_threshold' metrics.json) |" >> report.md
+          
+          echo "" >> report.md
+          echo "## Visualization" >> report.md
+          cml publish confusion_matrix.png --md >> report.md
+          
+          echo "" >> report.md
+          echo "### Quality Gate" >> report.md
+          echo "F1 threshold: $F1_THRESHOLD" >> report.md
+          echo "ROC-AUC threshold: $ROC_AUC_THRESHOLD" >> report.md
+          
+          cml comment create report.md
+
+      - name: Upload model artifact (main only)
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model
+          path: data/models/model.pkl

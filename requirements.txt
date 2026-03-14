@@ -10,3 +10,6 @@ imblearn
 optuna
 hydra-core
 omegaconf
+pytest
+flake8
+black
