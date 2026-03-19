@@ -1,0 +1,14 @@
+[2026-03-19T19:52:35.195+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ml_training_pipeline.wait_for_data scheduled__2026-03-18T19:52:06.533623+00:00 [queued]>
+[2026-03-19T19:52:35.203+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ml_training_pipeline.wait_for_data scheduled__2026-03-18T19:52:06.533623+00:00 [queued]>
+[2026-03-19T19:52:35.203+0000] {taskinstance.py:1359} INFO - Starting attempt 1 of 2
+[2026-03-19T19:52:35.218+0000] {taskinstance.py:1380} INFO - Executing <Task(PythonSensor): wait_for_data> on 2026-03-18 19:52:06.533623+00:00
+[2026-03-19T19:52:35.224+0000] {standard_task_runner.py:57} INFO - Started process 792 to run task
+[2026-03-19T19:52:35.226+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ml_training_pipeline', 'wait_for_data', 'scheduled__2026-03-18T19:52:06.533623+00:00', '--job-id', '3', '--raw', '--subdir', 'DAGS_FOLDER/ml_pipeline.py', '--cfg-path', '/tmp/tmp6zidxieg']
+[2026-03-19T19:52:35.231+0000] {standard_task_runner.py:85} INFO - Job 3: Subtask wait_for_data
+[2026-03-19T19:52:35.267+0000] {task_command.py:415} INFO - Running <TaskInstance: ml_training_pipeline.wait_for_data scheduled__2026-03-18T19:52:06.533623+00:00 [running]> on host 086b84115a1e
+[2026-03-19T19:52:35.337+0000] {taskinstance.py:1660} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ml_training_pipeline' AIRFLOW_CTX_TASK_ID='wait_for_data' AIRFLOW_CTX_EXECUTION_DATE='2026-03-18T19:52:06.533623+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-03-18T19:52:06.533623+00:00'
+[2026-03-19T19:52:35.338+0000] {python.py:72} INFO - Poking callable: <function check_data_ready at 0x7fc8a2489a60>
+[2026-03-19T19:52:35.339+0000] {base.py:287} INFO - Success criteria met. Exiting.
+[2026-03-19T19:52:35.345+0000] {taskinstance.py:1398} INFO - Marking task as SUCCESS. dag_id=ml_training_pipeline, task_id=wait_for_data, execution_date=20260318T195206, start_date=20260319T195235, end_date=20260319T195235
+[2026-03-19T19:52:35.398+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2026-03-19T19:52:35.426+0000] {taskinstance.py:2776} INFO - 1 downstream tasks scheduled from follow-on schedule check

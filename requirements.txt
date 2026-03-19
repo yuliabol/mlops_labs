@@ -13,3 +13,4 @@ omegaconf
 pytest
 flake8
 black
+dvc

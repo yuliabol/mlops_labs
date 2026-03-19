@@ -1,0 +1,31 @@
+[2026-03-19T19:37:35.382+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ml_training_pipeline.data_preparation scheduled__2026-03-18T19:37:15.020303+00:00 [queued]>
+[2026-03-19T19:37:35.391+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ml_training_pipeline.data_preparation scheduled__2026-03-18T19:37:15.020303+00:00 [queued]>
+[2026-03-19T19:37:35.391+0000] {taskinstance.py:1359} INFO - Starting attempt 1 of 2
+[2026-03-19T19:37:35.408+0000] {taskinstance.py:1380} INFO - Executing <Task(BashOperator): data_preparation> on 2026-03-18 19:37:15.020303+00:00
+[2026-03-19T19:37:35.416+0000] {standard_task_runner.py:57} INFO - Started process 738 to run task
+[2026-03-19T19:37:35.419+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ml_training_pipeline', 'data_preparation', 'scheduled__2026-03-18T19:37:15.020303+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/ml_pipeline.py', '--cfg-path', '/tmp/tmpbvwoie2i']
+[2026-03-19T19:37:35.421+0000] {standard_task_runner.py:85} INFO - Job 4: Subtask data_preparation
+[2026-03-19T19:37:35.460+0000] {task_command.py:415} INFO - Running <TaskInstance: ml_training_pipeline.data_preparation scheduled__2026-03-18T19:37:15.020303+00:00 [running]> on host feb67057218a
+[2026-03-19T19:37:35.531+0000] {taskinstance.py:1660} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ml_training_pipeline' AIRFLOW_CTX_TASK_ID='data_preparation' AIRFLOW_CTX_EXECUTION_DATE='2026-03-18T19:37:15.020303+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-03-18T19:37:15.020303+00:00'
+[2026-03-19T19:37:35.532+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-03-19T19:37:35.532+0000] {subprocess.py:75} INFO - Running command: ['/bin/bash', '-c', 'cd /opt/***/ml_project && dvc repro prepare']
+[2026-03-19T19:37:35.545+0000] {subprocess.py:86} INFO - Output:
+[2026-03-19T19:37:36.330+0000] {subprocess.py:93} INFO - Running stage 'prepare':
+[2026-03-19T19:37:36.330+0000] {subprocess.py:93} INFO - > python src/prepare.py data/raw/healthcare-dataset-stroke-data.csv data/prepared
+[2026-03-19T19:37:37.279+0000] {subprocess.py:93} INFO - Data split completed. Train shape: (4088, 12), Test shape: (1022, 12)
+[2026-03-19T19:37:37.280+0000] {subprocess.py:93} INFO - Train data saved to: data/prepared/train.csv
+[2026-03-19T19:37:37.280+0000] {subprocess.py:93} INFO - Test data saved to: data/prepared/test.csv
+[2026-03-19T19:37:37.446+0000] {subprocess.py:93} INFO - Updating lock file 'dvc.lock'
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - 
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - To track the changes with git, run:
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - 
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - 	git add dvc.lock
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - 
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - To enable auto staging, run:
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - 
+[2026-03-19T19:37:37.452+0000] {subprocess.py:93} INFO - 	dvc config core.autostage true
+[2026-03-19T19:37:37.460+0000] {subprocess.py:93} INFO - Use `dvc push` to send your updates to remote storage.
+[2026-03-19T19:37:37.572+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2026-03-19T19:37:37.601+0000] {taskinstance.py:1398} INFO - Marking task as SUCCESS. dag_id=ml_training_pipeline, task_id=data_preparation, execution_date=20260318T193715, start_date=20260319T193735, end_date=20260319T193737
+[2026-03-19T19:37:37.636+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2026-03-19T19:37:37.670+0000] {taskinstance.py:2776} INFO - 1 downstream tasks scheduled from follow-on schedule check

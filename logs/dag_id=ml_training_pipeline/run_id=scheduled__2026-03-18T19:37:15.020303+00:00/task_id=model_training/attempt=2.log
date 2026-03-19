@@ -1,0 +1,26 @@
+[2026-03-19T19:42:41.645+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ml_training_pipeline.model_training scheduled__2026-03-18T19:37:15.020303+00:00 [queued]>
+[2026-03-19T19:42:41.652+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ml_training_pipeline.model_training scheduled__2026-03-18T19:37:15.020303+00:00 [queued]>
+[2026-03-19T19:42:41.653+0000] {taskinstance.py:1359} INFO - Starting attempt 2 of 2
+[2026-03-19T19:42:41.666+0000] {taskinstance.py:1380} INFO - Executing <Task(BashOperator): model_training> on 2026-03-18 19:37:15.020303+00:00
+[2026-03-19T19:42:41.673+0000] {standard_task_runner.py:57} INFO - Started process 1339 to run task
+[2026-03-19T19:42:41.676+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ml_training_pipeline', 'model_training', 'scheduled__2026-03-18T19:37:15.020303+00:00', '--job-id', '9', '--raw', '--subdir', 'DAGS_FOLDER/ml_pipeline.py', '--cfg-path', '/tmp/tmpm52oj7gz']
+[2026-03-19T19:42:41.678+0000] {standard_task_runner.py:85} INFO - Job 9: Subtask model_training
+[2026-03-19T19:42:41.721+0000] {task_command.py:415} INFO - Running <TaskInstance: ml_training_pipeline.model_training scheduled__2026-03-18T19:37:15.020303+00:00 [running]> on host feb67057218a
+[2026-03-19T19:42:41.780+0000] {taskinstance.py:1660} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ml_training_pipeline' AIRFLOW_CTX_TASK_ID='model_training' AIRFLOW_CTX_EXECUTION_DATE='2026-03-18T19:37:15.020303+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-03-18T19:37:15.020303+00:00'
+[2026-03-19T19:42:41.781+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-03-19T19:42:41.782+0000] {subprocess.py:75} INFO - Running command: ['/bin/bash', '-c', 'cd /opt/***/ml_project && python src/train.py data/prepared/train.csv data/prepared/test.csv data/models --ci']
+[2026-03-19T19:42:41.794+0000] {subprocess.py:86} INFO - Output:
+[2026-03-19T19:42:43.013+0000] {subprocess.py:93} INFO - Traceback (most recent call last):
+[2026-03-19T19:42:43.014+0000] {subprocess.py:93} INFO -   File "src/train.py", line 9, in <module>
+[2026-03-19T19:42:43.014+0000] {subprocess.py:93} INFO -     from imblearn.pipeline import Pipeline as ImbPipeline
+[2026-03-19T19:42:43.014+0000] {subprocess.py:93} INFO - ModuleNotFoundError: No module named 'imblearn'
+[2026-03-19T19:42:43.173+0000] {subprocess.py:97} INFO - Command exited with return code 1
+[2026-03-19T19:42:43.183+0000] {taskinstance.py:1935} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/bash.py", line 210, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2026-03-19T19:42:43.186+0000] {taskinstance.py:1398} INFO - Marking task as FAILED. dag_id=ml_training_pipeline, task_id=model_training, execution_date=20260318T193715, start_date=20260319T194241, end_date=20260319T194243
+[2026-03-19T19:42:43.202+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 9 for task model_training (Bash command failed. The command returned a non-zero exit code 1.; 1339)
+[2026-03-19T19:42:43.212+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2026-03-19T19:42:43.242+0000] {taskinstance.py:2776} INFO - 0 downstream tasks scheduled from follow-on schedule check

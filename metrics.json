@@ -1,0 +1,9 @@
+{
+    "test_f1": 0.3313609467455621,
+    "test_acc": 0.8894324853228963,
+    "test_roc_auc": 0.8440534979423868,
+    "test_precision": 0.23529411764705882,
+    "test_recall": 0.56,
+    "optimal_threshold": 0.7199999999999996,
+    "max_depth": 2
+}

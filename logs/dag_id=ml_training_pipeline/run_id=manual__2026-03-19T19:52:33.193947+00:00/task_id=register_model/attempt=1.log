@@ -1,0 +1,14 @@
+[2026-03-19T19:57:51.439+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ml_training_pipeline.register_model manual__2026-03-19T19:52:33.193947+00:00 [queued]>
+[2026-03-19T19:57:51.447+0000] {taskinstance.py:1157} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ml_training_pipeline.register_model manual__2026-03-19T19:52:33.193947+00:00 [queued]>
+[2026-03-19T19:57:51.447+0000] {taskinstance.py:1359} INFO - Starting attempt 1 of 2
+[2026-03-19T19:57:51.458+0000] {taskinstance.py:1380} INFO - Executing <Task(PythonOperator): register_model> on 2026-03-19 19:52:33.193947+00:00
+[2026-03-19T19:57:51.466+0000] {standard_task_runner.py:57} INFO - Started process 1621 to run task
+[2026-03-19T19:57:51.468+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ml_training_pipeline', 'register_model', 'manual__2026-03-19T19:52:33.193947+00:00', '--job-id', '12', '--raw', '--subdir', 'DAGS_FOLDER/ml_pipeline.py', '--cfg-path', '/tmp/tmpn_fvr5nd']
+[2026-03-19T19:57:51.470+0000] {standard_task_runner.py:85} INFO - Job 12: Subtask register_model
+[2026-03-19T19:57:51.510+0000] {task_command.py:415} INFO - Running <TaskInstance: ml_training_pipeline.register_model manual__2026-03-19T19:52:33.193947+00:00 [running]> on host 086b84115a1e
+[2026-03-19T19:57:51.581+0000] {taskinstance.py:1660} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ml_training_pipeline' AIRFLOW_CTX_TASK_ID='register_model' AIRFLOW_CTX_EXECUTION_DATE='2026-03-19T19:52:33.193947+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-03-19T19:52:33.193947+00:00'
+[2026-03-19T19:57:51.582+0000] {logging_mixin.py:151} INFO - Registering model in MLflow Model Registry...
+[2026-03-19T19:57:51.582+0000] {python.py:194} INFO - Done. Returned value was: None
+[2026-03-19T19:57:51.592+0000] {taskinstance.py:1398} INFO - Marking task as SUCCESS. dag_id=ml_training_pipeline, task_id=register_model, execution_date=20260319T195233, start_date=20260319T195751, end_date=20260319T195751
+[2026-03-19T19:57:51.640+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2026-03-19T19:57:51.663+0000] {taskinstance.py:2776} INFO - 0 downstream tasks scheduled from follow-on schedule check
